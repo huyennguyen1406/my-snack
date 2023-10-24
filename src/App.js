@@ -53,15 +53,20 @@ import { initialTravelPlan } from "./places.js";
 //   )
 // }
 
-function PlaceTree({ place }) {
-  const childPlaces = place.childPlaces;
+function PlaceTree({ id, placesById }) {
+  const place = placesById[id];
+  const childIds = place.childIds;
   return (
     <li>
       {place.title}
-      {childPlaces.length > 0 && (
+      {childIds.length > 0 && (
         <ol>
-          {childPlaces.map(place => (
-            <PlaceTree key={place.id} place={place} />
+          {childIds.map(childId => (
+            <PlaceTree 
+            key={childId} 
+            id={childId}
+            placesById={placesById} 
+            />
           ))}
         </ol>
       )}
@@ -71,13 +76,18 @@ function PlaceTree({ place }) {
 
 export default function TravelPlan() {
   const [plan, setPlan] = useState(initialTravelPlan);
-  const plantes = plan.childPlaces;
+  const root = plan[0];
+  const planteIds = root.childIds;
   return (
     <>
     <h2>Places to visit</h2>
     <ol>
-      {plantes.map(place => (
-        <PlaceTree key={place.id} place={place} />
+      {planteIds.map(id => (
+        <PlaceTree 
+        key={id} 
+        id={id}
+        placesById={plan} 
+        />
       ))}
     </ol>
     </>
